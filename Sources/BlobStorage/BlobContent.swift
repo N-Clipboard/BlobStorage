@@ -12,7 +12,7 @@ public struct BlobContent: Codable {
     var filename: String
     internal var id: Int?
 
-    init(name: String) {
+    public init(name: String) {
         self.filename = name
     }
 }

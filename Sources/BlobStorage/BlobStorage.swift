@@ -3,7 +3,7 @@ import Foundation
 public struct BlobStorage {
     private let configurationFileName = "index.json"
     private var _managed: [BlobContent] = []
-    private var caches = LRU<Data, Date>(capacity: 20)
+    private var caches: LRU<Data, Date>
 
     var bundleName: String
     let workSpace: URL
@@ -18,8 +18,9 @@ public struct BlobStorage {
         }
     }
 
-    public init?(bundleName: String) throws {
+    public init?(bundleName: String, cacheCapacity: Int = 20) throws {
         self.bundleName = bundleName
+        self.caches = LRU<Data, Date>(capacity: cacheCapacity)
         guard let osCachePath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first else { return nil }
         self.workSpace = URL(fileURLWithPath: osCachePath, isDirectory: true).appendingPathComponent(bundleName, isDirectory: true)
         try FileManager.default.createDirectory(at: workSpace, withIntermediateDirectories: true)

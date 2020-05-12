@@ -8,7 +8,7 @@
 import Foundation
 
 struct LRU<T: Equatable, K: Hashable> {
-    var capacity: Int
+    public var capacity: Int
     internal var bucket: [K: T] = [:]
     internal var priority: [K] = []
     
