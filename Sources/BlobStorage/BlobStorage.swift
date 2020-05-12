@@ -1,6 +1,6 @@
 import Foundation
 
-struct BlobStorage {
+public struct BlobStorage {
     private let configurationFileName = "index.json"
     private var _managed: [BlobContent] = []
     private var caches = LRU<Data, Date>(capacity: 20)
@@ -18,7 +18,7 @@ struct BlobStorage {
         }
     }
 
-    init?(bundleName: String) throws {
+    public init?(bundleName: String) throws {
         self.bundleName = bundleName
         guard let osCachePath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first else { return nil }
         self.workSpace = URL(fileURLWithPath: osCachePath, isDirectory: true).appendingPathComponent(bundleName, isDirectory: true)
@@ -44,7 +44,7 @@ struct BlobStorage {
         }
     }
 
-    mutating func save(item: BlobContent, data: Data) throws {
+    public mutating func save(item: BlobContent, data: Data) throws {
         let existedIndex = managed.firstIndex { (itemInList) -> Bool in
             itemInList.filename == item.filename
         }
@@ -58,14 +58,14 @@ struct BlobStorage {
         caches.put(key: item.createdAt, item: data)
     }
 
-    mutating func remove(item: BlobContent) throws {
+    public mutating func remove(item: BlobContent) throws {
         guard let index = managed.lastIndex(of: item) else { return }
         managed.remove(at: index)
         caches.delete(key: item.createdAt)
         try FileManager.default.removeItem(at: workSpace.appendingPathComponent(item.filename))
     }
 
-    mutating func fetch(item: BlobContent) -> Data? {
+    public mutating func fetch(item: BlobContent) -> Data? {
         let url = workSpace.appendingPathComponent(item.filename, isDirectory: false)
         let cached = caches.get(key: item.createdAt)
         
@@ -79,7 +79,7 @@ struct BlobStorage {
         return nil
     }
     
-    mutating func fetch(filename: String) -> Data? {
+    public mutating func fetch(filename: String) -> Data? {
         fetch(item: .init(name: filename))
     }
 }

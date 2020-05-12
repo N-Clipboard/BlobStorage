@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct BlobContent: Codable {
+public struct BlobContent: Codable {
     var createdAt: Date = Date()
     var filename: String
     internal var id: Int?
@@ -18,7 +18,7 @@ struct BlobContent: Codable {
 }
 
 extension BlobContent: Equatable {
-    static func == (left: BlobContent, right: BlobContent) -> Bool {
+    public static func == (left: BlobContent, right: BlobContent) -> Bool {
         left.filename == right.filename
     }
 }
